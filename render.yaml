@@ -1,0 +1,53 @@
+services:
+  - type: web
+    name: leadflow
+    runtime: node
+    plan: starter
+    buildCommand: npm ci && npx prisma generate && npm run build
+    preDeployCommand: npm run db:migrate && npm run seed
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: AUTH_REQUIRED
+        value: "true"
+      - key: DEMO_MODE
+        value: "false"
+      - key: NOTIFICATIONS_ENABLED
+        value: "false"
+      - key: EMAIL_PROVIDER
+        value: console
+      - key: DATABASE_URL
+        fromDatabase:
+          name: leadflow-db
+          property: connectionString
+      - key: PUBLIC_APP_URL
+        fromService:
+          type: web
+          name: leadflow
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: INTAKE_KEY_PEPPER
+        generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD_HASH
+        sync: false
+      - key: SOURCE_KEYS_JSON
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_VALIDATE_SIGNATURES
+        value: "true"
+      - key: TWILIO_NUMBER_ASSETS_JSON
+        sync: false
+      - key: COMPOSIO_WEBHOOK_SECRET
+        sync: false
+
+databases:
+  - name: leadflow-db
+    plan: basic-256mb
+    postgresMajorVersion: "17"
