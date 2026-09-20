@@ -9,6 +9,10 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    env:
+      # Prisma validation reads this value but does not connect to the database.
+      # It is intentionally a disposable CI-only URL, never a production secret.
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/leadflow
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
