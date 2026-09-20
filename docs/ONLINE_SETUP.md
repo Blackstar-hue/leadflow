@@ -24,4 +24,6 @@ The app is a Vite browser client plus one Node server. After `npm run build`, `n
 8. Verify call records, form records, duplicate handling, status changes, routing, and notification test mode.
 9. Create a production service and connect live sources only after explicit approval.
 
+The current repository also contains `render.yaml`, which automates the web-service/database wiring described above. It deliberately leaves account secrets as private Render inputs. The deployment is not considered complete until the resulting `/healthz` response reports a healthy PostgreSQL connection and the login flow works from a separate network.
+
 Edits can continue throughout this process. Every change should be built and smoke-tested before deployment; the previous successful deployment remains available for rollback on a managed host.

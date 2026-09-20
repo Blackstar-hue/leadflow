@@ -12,6 +12,14 @@ Use a managed PostgreSQL database and a separate staging project/domain. Set a s
 
 The project can now run as one Node web service: it serves the built browser UI and the API from the same HTTPS origin. Render is a suitable first host because its Node web service receives a public `onrender.com` URL, supports environment variables and health checks, and can auto-deploy from a connected Git repository.
 
+### Prepared Render Blueprint
+
+The repository includes `render.yaml`. In Render, choose **New > Blueprint**, select the `Blackstar-hue/leadflow` repository, and review the proposed `leadflow` web service and `leadflow-db` PostgreSQL database before applying it. The blueprint wires the private database URL, runs migrations and the idempotent known-asset seed before each deployment, and generates the session and intake secrets automatically.
+
+Render will ask for the values marked `sync: false`. Enter them only in Render's private setup screen: `ADMIN_EMAIL`, the output of `npm run hash-password`, `SOURCE_KEYS_JSON`, the replacement `TWILIO_AUTH_TOKEN`, `TWILIO_NUMBER_ASSETS_JSON`, and optionally `COMPOSIO_WEBHOOK_SECRET`. Nothing in that list is committed to GitHub. Do not put real secrets in `render.yaml`.
+
+The blueprint uses a paid web-service/database tier suitable for a real always-on service. Confirm the current price in Render before applying it. A free or sleeping service is suitable for a demo, but not for reliable phone lead capture.
+
 Use these values when creating the staging web service:
 
 ```text
